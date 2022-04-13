@@ -34,6 +34,7 @@ Route::middleware(['web'])->group(function () {
         // menu 
         route::prefix('menus')->group(function(){
             route::get('add', [MenuController::class, 'create']);
+            route::post('add', [MenuController::class, 'store']);
         });
     });
 
