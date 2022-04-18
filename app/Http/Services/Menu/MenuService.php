@@ -3,12 +3,19 @@
 namespace App\Http\Services\Menu;
 use Illuminate\Support\Facades\Session;
 use App\Models\Menu;
+use Illuminate\Support\Facades\DB;
 
 class MenuService
 {
     public function getParent(){
         return Menu::where('parent_id', 0)->get();
     }
+
+    public function getAll()
+    {
+        return Menu::orderbyDesc('id')->paginate(20);
+    }
+
     function create($request)
     {
         try{
@@ -26,5 +33,14 @@ class MenuService
             return false;
         }
         return true;
+    }
+    public function destroy($request)
+    {
+        $id = (int) $request->input('id');
+        $menu = Menu::where('id', $id)->first();
+        if($menu){
+            return Menu::where('id', $id)->orWhere('parent_id', $id)->delete();
+        }
+        return false;
     }
 }

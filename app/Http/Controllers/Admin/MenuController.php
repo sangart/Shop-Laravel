@@ -24,8 +24,27 @@ class MenuController extends Controller
         ]);
     }
     public function store( CreateFormRequest $request ){ // nhận tất cả request từ form
-        $result = $this->menuService->create($request);
-
+        $this->menuService->create($request);
         return redirect()->back();
+    }
+    public function index()
+    {
+        return view('admin.menu.list',[
+            'title' => 'Danh sách danh mục mới nhất',
+            'menus' => $this->menuService->getAll()
+        ]);
+    }
+    public function destroy(Request $request)
+    {
+        $result = $this->menuService->destroy($request);
+        if($result){
+            return response()->json([
+                'error' => false,
+                'message' => 'xóa thành công danh mục'
+            ]);
+        }
+         return response()->json([
+             'error' => true
+         ]);
     }
 }
